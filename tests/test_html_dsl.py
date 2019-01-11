@@ -7,15 +7,11 @@ def html():
     yield HTML[
         BODY[
             H1["Title"],
-            P(color="yellow")[
-                "Hello, World.", SPAN["something in span"], "Out of the span"
-            ],
+            P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"],
             P["This is the second paragraph."],
             DIV[
                 DIV(_class="row")[
-                    DIV(_class="column", color="red")["col1"],
-                    DIV(_class="column", color="blue")["col2"],
-                    DIV(_class="column", color="green")["col3"],
+                    DIV(_class="column", color="red")["col1"], DIV(_class="column", color="blue")["col2"], DIV(_class="column", color="green")["col3"]
                 ]
             ],
         ]

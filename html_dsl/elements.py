@@ -36,37 +36,15 @@ class BaseHtmlElement:
 
     def __repr__(self):
         blank = "  " * self.level
-        attrs = (
-            "({})".format(
-                ";".join(f"{key}={repr(self.attrs[key])}" for key in self.attrs)
-            )
-            if self.attrs
-            else ""
-        )
-        children = "\n".join(
-            repr(child) if isinstance(child, BaseHtmlElement) else blank + repr(child)
-            for child in self.children
-        )
-        return "{blank}{name}{attrs}[\n{children}]".format(
-            blank=blank, name=self.name, attrs=attrs, children=children
-        )
+        attrs = "({})".format(";".join(f"{key}={repr(self.attrs[key])}" for key in self.attrs)) if self.attrs else ""
+        children = "\n".join(repr(child) if isinstance(child, BaseHtmlElement) else blank + repr(child) for child in self.children)
+        return "{blank}{name}{attrs}[\n{children}]".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
     def __str__(self):
         blank = "  " * self.level
-        attrs = (
-            " {}".format(
-                " ".join(f'{key}="{str(self.attrs[key])}"' for key in self.attrs)
-            )
-            if self.attrs
-            else ""
-        )
-        children = "\n".join(
-            str(child) if isinstance(child, BaseHtmlElement) else blank + str(child)
-            for child in self.children
-        )
-        return "{blank}<{name}{attrs}>\n{children}\n{blank}</{name}>".format(
-            blank=blank, name=self.name, attrs=attrs, children=children
-        )
+        attrs = " {}".format(" ".join(f'{key}="{str(self.attrs[key])}"' for key in self.attrs)) if self.attrs else ""
+        children = "\n".join(str(child) if isinstance(child, BaseHtmlElement) else blank + str(child) for child in self.children)
+        return "{blank}<{name}{attrs}>\n{children}\n{blank}</{name}>".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
 
 HTML = BaseHtmlElement("html")
