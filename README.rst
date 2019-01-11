@@ -5,10 +5,9 @@ A HTML-DSL for Python
 USE
 ---
 
-.. code-block:: python
-from html_dsl.elements import BaseHtmlElement, HTML, BODY, H1, P, DIV, SPAN
 
-html = HTML[
+>>> from html_dsl.elements import BaseHtmlElement, HTML, BODY, H1, P, DIV, SPAN
+>>> html = HTML[
         BODY[
             H1["Title"],
             P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"],
@@ -20,8 +19,8 @@ html = HTML[
             ],
         ]
     ]
-
-str(html) == """<html>
+>>> print(html)
+<html>
   <body>
     <h1>
     Title
@@ -50,7 +49,7 @@ str(html) == """<html>
       </div>
     </div>
   </body>
-</html>"""
+</html>
 
 Install
 -------
