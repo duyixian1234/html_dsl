@@ -12,6 +12,8 @@ rope = "*"
 mypy = "*"
 black = "*"
 pytest-cov = "*"
+twine = "*"
+setuptools = "*"
 
 [packages]
 
