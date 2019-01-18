@@ -1,4 +1,15 @@
-from typing import Optional
+from collections.abc import Iterable
+from typing import Any, Optional
+
+
+def flatten(source: Any):
+    if isinstance(source, str):
+        yield source
+    elif isinstance(source, Iterable):
+        for element in source:
+            yield from flatten(element)
+    else:
+        yield source
 
 
 class BaseHtmlElement:
@@ -16,18 +27,14 @@ class BaseHtmlElement:
         element.parent = self.parent
         return element
 
-    def __getitem__(self, elements) -> "BaseHtmlElement":
+    def __getitem__(self, children) -> "BaseHtmlElement":
         element = BaseHtmlElement(self.name)
         element.attrs.update(self.attrs)
-        if isinstance(elements, tuple):
-            for one in elements:
-                if isinstance(one, BaseHtmlElement):
-                    one.parent = element
-            element.children.extend(elements)
-        else:
-            if isinstance(elements, BaseHtmlElement):
-                elements.parent = element
-            element.children.append(elements)
+        true_children = list(flatten(children))
+        for one in true_children:
+            if isinstance(one, BaseHtmlElement):
+                one.parent = element
+        element.children.extend(true_children)
         return element
 
     @property

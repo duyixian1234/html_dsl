@@ -1,6 +1,7 @@
 import pytest
+
 from html_dsl import elements
-from html_dsl.elements import BaseHtmlElement, HTML, BODY, H1, P, DIV, SPAN
+from html_dsl.elements import BODY, DIV, H1, HTML, SPAN, BaseHtmlElement, P, flatten
 
 
 @pytest.fixture
@@ -17,6 +18,13 @@ def html():
             ],
         ]
     ]
+
+
+def test_flatten():
+    assert list(flatten(1)) == [1]
+    assert list(flatten("aaa")) == ["aaa"]
+    assert list(flatten([1, 2, 3, "aaa"])) == [1, 2, 3, "aaa"]
+    assert list(flatten([1, 2, 3, "aaa", [4, 5]])) == [1, 2, 3, "aaa", 4, 5]
 
 
 def test_html(html: BaseHtmlElement):
