@@ -1,4 +1,5 @@
 import pytest
+from html_dsl import elements
 from html_dsl.elements import BaseHtmlElement, HTML, BODY, H1, P, DIV, SPAN
 
 
@@ -71,3 +72,7 @@ def test_html(html: BaseHtmlElement):
         div(color='green';class='column')[
         'col3']]]]]"""
     assert repr(html) == repr_str
+
+
+def test_elements():
+    assert all(name == value.name.upper() for name, value in elements.__dict__.items() if isinstance(value, elements.BaseHtmlElement))
