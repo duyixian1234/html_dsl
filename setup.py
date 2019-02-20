@@ -55,7 +55,7 @@ class UploadCommand(Command):
 
 setup(
     name=NAME,
-    version="0.2.0",
+    version="0.2.1",
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
