@@ -54,7 +54,7 @@ class BaseHtmlElement:
 
     def __str__(self):
         blank = "  " * self.level
-        attrs = " {}".format(" ".join(f'{key}="{str(self.attrs[key])}"' for key in self.attrs)) if self.attrs else ""
+        attrs = " {}".format(" ".join(f'{key.replace("_", "-")}="{str(self.attrs[key])}"' for key in self.attrs)) if self.attrs else ""
         children = "\n".join(str(child) if isinstance(child, BaseHtmlElement) else blank + str(child) for child in self.children)
         if self.single:
             return "{blank}<{name}{attrs}>".format(blank=blank, name=self.name, attrs=attrs)

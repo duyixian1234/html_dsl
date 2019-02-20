@@ -90,3 +90,7 @@ def test_single():
     META = BaseHtmlElement('meta', single=True)
     assert str(META(a='aaa')) == '<meta a="aaa">'
     assert repr(META(a='aaa')) == "meta(a='aaa')"
+
+
+def test_hyphen():
+    assert str(HTML(a_b='a-b')) == '<html a-b="a-b">\n\n</html>'
