@@ -84,3 +84,9 @@ def test_html(html: BaseHtmlElement):
 
 def test_elements():
     assert all(name == value.name.upper() for name, value in elements.__dict__.items() if isinstance(value, elements.BaseHtmlElement))
+
+
+def test_single():
+    META = BaseHtmlElement('meta', single=True)
+    assert str(META(a='aaa')) == '<meta a="aaa">'
+    assert repr(META(a='aaa')) == "meta(a='aaa')"

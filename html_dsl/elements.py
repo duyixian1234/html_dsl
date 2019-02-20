@@ -13,11 +13,12 @@ def flatten(source: Any):
 
 
 class BaseHtmlElement:
-    def __init__(self, name: str):
+    def __init__(self, name: str, single=False):
         self.name = name
         self.attrs: dict = {}
         self.children: list = []
         self.parent: Optional[BaseHtmlElement] = None
+        self.single = single
 
     def __call__(self, **attrs) -> "BaseHtmlElement":
         element = BaseHtmlElement(self.name)
@@ -25,6 +26,7 @@ class BaseHtmlElement:
             attrs["class"] = attrs.pop("_class")
         element.attrs.update(attrs)
         element.parent = self.parent
+        element.single = self.single
         return element
 
     def __getitem__(self, children) -> "BaseHtmlElement":
@@ -35,6 +37,7 @@ class BaseHtmlElement:
             if isinstance(one, BaseHtmlElement):
                 one.parent = element
         element.children.extend(true_children)
+        element.single = self.single
         return element
 
     @property
@@ -45,12 +48,16 @@ class BaseHtmlElement:
         blank = "  " * self.level
         attrs = "({})".format(";".join(f"{key}={repr(self.attrs[key])}" for key in self.attrs)) if self.attrs else ""
         children = "\n".join(repr(child) if isinstance(child, BaseHtmlElement) else blank + repr(child) for child in self.children)
+        if self.single:
+            return "{blank}{name}{attrs}".format(blank=blank, name=self.name, attrs=attrs)
         return "{blank}{name}{attrs}[\n{children}]".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
     def __str__(self):
         blank = "  " * self.level
         attrs = " {}".format(" ".join(f'{key}="{str(self.attrs[key])}"' for key in self.attrs)) if self.attrs else ""
         children = "\n".join(str(child) if isinstance(child, BaseHtmlElement) else blank + str(child) for child in self.children)
+        if self.single:
+            return "{blank}<{name}{attrs}>".format(blank=blank, name=self.name, attrs=attrs)
         return "{blank}<{name}{attrs}>\n{children}\n{blank}</{name}>".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
 
