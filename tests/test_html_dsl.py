@@ -94,3 +94,8 @@ def test_single():
 
 def test_hyphen():
     assert str(HTML(a_b='a-b')) == '<html a-b="a-b">\n\n</html>'
+
+def test_no_content():
+    LINK = BaseHtmlElement('link',no_content=True)
+    assert str(LINK(href='//a.css')) == '<link href="//a.css"/>'
+    assert repr(LINK(herf='//a.css')) == 'link(herf='//a.css')'

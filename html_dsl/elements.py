@@ -13,12 +13,13 @@ def flatten(source: Any):
 
 
 class BaseHtmlElement:
-    def __init__(self, name: str, single=False):
+    def __init__(self, name: str, single: bool = False, no_content: bool = False):
         self.name = name
         self.attrs: dict = {}
         self.children: list = []
         self.parent: Optional[BaseHtmlElement] = None
         self.single = single
+        self.no_content = no_content
 
     def __call__(self, **attrs) -> "BaseHtmlElement":
         element = BaseHtmlElement(self.name)
@@ -27,6 +28,7 @@ class BaseHtmlElement:
         element.attrs.update(attrs)
         element.parent = self.parent
         element.single = self.single
+        element.no_content = self.no_content
         return element
 
     def __getitem__(self, children) -> "BaseHtmlElement":
@@ -38,6 +40,7 @@ class BaseHtmlElement:
                 one.parent = element
         element.children.extend(true_children)
         element.single = self.single
+        element.no_content = self.no_content
         return element
 
     @property
@@ -48,7 +51,7 @@ class BaseHtmlElement:
         blank = "  " * self.level
         attrs = "({})".format(";".join(f"{key}={repr(self.attrs[key])}" for key in self.attrs)) if self.attrs else ""
         children = "\n".join(repr(child) if isinstance(child, BaseHtmlElement) else blank + repr(child) for child in self.children)
-        if self.single:
+        if self.single or self.no_content:
             return "{blank}{name}{attrs}".format(blank=blank, name=self.name, attrs=attrs)
         return "{blank}{name}{attrs}[\n{children}]".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
@@ -58,6 +61,8 @@ class BaseHtmlElement:
         children = "\n".join(str(child) if isinstance(child, BaseHtmlElement) else blank + str(child) for child in self.children)
         if self.single:
             return "{blank}<{name}{attrs}>".format(blank=blank, name=self.name, attrs=attrs)
+        elif self.no_content:
+            return "{blank}<{name}{attrs}/>".format(blank=blank, name=self.name, attrs=attrs)
         return "{blank}<{name}{attrs}>\n{children}\n{blank}</{name}>".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
 
@@ -113,7 +118,7 @@ INS = BaseHtmlElement("ins")
 LABEL = BaseHtmlElement("label")
 LEGEND = BaseHtmlElement("legend")
 LI = BaseHtmlElement("li")
-LINK = BaseHtmlElement("link")
+LINK = BaseHtmlElement("link", no_content=True)
 MAIN = BaseHtmlElement("main")
 MAP = BaseHtmlElement("map")
 MARK = BaseHtmlElement("mark")
