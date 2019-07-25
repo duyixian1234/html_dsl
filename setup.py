@@ -42,7 +42,8 @@ class UploadCommand(Command):
     def run(self):
         try:
             self.status("Removing previous builds…")
-            rmtree(here / "dist")
+            path = here / "dist"
+            rmtree(str(path))
         except OSError:
             pass
 
@@ -55,7 +56,7 @@ class UploadCommand(Command):
 
 setup(
     name=NAME,
-    version="0.3.0",
+    version="0.3.1",
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
