@@ -6,18 +6,11 @@ from html_dsl.elements import BODY, DIV, H1, HTML, SPAN, BaseHtmlElement, P, fla
 
 @pytest.fixture
 def html():
-    yield HTML[
-        BODY[
-            H1["Title"],
-            P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"],
-            P["This is the second paragraph."],
-            DIV[
-                DIV(_class="row")[
-                    DIV(_class="column", color="red")["col1"], DIV(_class="column", color="blue")["col2"], DIV(_class="column", color="green")["col3"]
-                ]
-            ],
-        ]
-    ]
+    yield HTML[BODY[H1["Title"],
+                    P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"], P["This is the second paragraph."], DIV[
+                        DIV(_class="row")[DIV(_class="column", color="red")["col1"],
+                                          DIV(_class="column", color="blue")["col2"],
+                                          DIV(_class="column", color="green")["col3"]]], ]]
 
 
 def test_flatten():
@@ -95,7 +88,8 @@ def test_single():
 def test_hyphen():
     assert str(HTML(a_b='a-b')) == '<html a-b="a-b">\n\n</html>'
 
+
 def test_no_content():
-    LINK = BaseHtmlElement('link',no_content=True)
+    LINK = BaseHtmlElement('link', no_content=True)
     assert str(LINK(href='//a.css')) == '<link href="//a.css"/>'
-    assert repr(LINK(herf='//a.css')) ==  "link(herf='//a.css')"
+    assert repr(LINK(herf='//a.css')) == "link(herf='//a.css')"
