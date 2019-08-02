@@ -15,7 +15,6 @@ AUTHOR = "Yixian Du"
 
 # What packages are required for this module to be executed?
 
-
 here = Path(__file__).cwd()
 
 with open(here / "README.rst", encoding="utf-8") as f:
@@ -62,7 +61,7 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     url=URL,
-    packages=find_packages(exclude=("tests",)),
+    packages=find_packages(exclude=("tests", )),
     entry_points={},
     install_requires=[],
     include_package_data=True,
