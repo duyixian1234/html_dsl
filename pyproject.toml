@@ -1,0 +1,69 @@
+[tool.poetry]
+authors = ["duyixian <duyixian1234@qq.com>"]
+description = "A HTML-DSL for Python"
+license = "MIT"
+name = "html_dsl"
+readme = "README.rst"
+repository = "https://github.com/duyixian1234/html_dsl"
+version = "0.4.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+black = "^21.5b0"
+isort = "^5.8.0"
+mypy = "^0.812"
+pylint = "^2.8.2"
+pytest = "^6.2.4"
+pytest-cov = "^2.11.1"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.pylint.master]
+job = 0
+suggestion-mode = "yes"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.basic]
+argument-naming-style = "any"
+attr-naming-style = "any"
+function-naming-style = "any"
+variable-naming-style = "any"
+
+[tool.pylint.message_control]
+disable = ["missing-docstring", "logging-fstring-interpolation", "similarities"]
+
+[tool.pylint.design]
+min-public-methods = 0
+
+[tool.pytest.ini_options]
+addopts = " -svv --cov=html_dsl"
+minversion = "6.0"
+testpaths = [
+  "tests",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+]
+fail_under = 90.0
+show_missing = true
+skip_covered = true
+skip_empty = true
+sort = "miss"
+
+[tool.coverage.path]
+source = "html_dsl"
+
+[tool.black]
+line-length = 120
