@@ -1,16 +1,26 @@
 import pytest
 
-from html_dsl import elements
-from html_dsl.elements import BODY, DIV, H1, HTML, SPAN, BaseHtmlElement, P, flatten
+from html_dsl import common
+from html_dsl.elements import BaseHtmlElement, flatten
+from html_dsl.common import BODY, DIV, H1, HTML, SPAN, P
 
 
 @pytest.fixture
-def html():
-    yield HTML[BODY[H1["Title"],
-                    P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"], P["This is the second paragraph."], DIV[
-                        DIV(_class="row")[DIV(_class="column", color="red")["col1"],
-                                          DIV(_class="column", color="blue")["col2"],
-                                          DIV(_class="column", color="green")["col3"]]], ]]
+def html_content():
+    yield HTML[
+        BODY[
+            H1["Title"],
+            P(color="yellow")["Hello, World.", SPAN["something in span"], "Out of the span"],
+            P["This is the second paragraph."],
+            DIV[
+                DIV(_class="row")[
+                    DIV(_class="column", color="red")["col1"],
+                    DIV(_class="column", color="blue")["col2"],
+                    DIV(_class="column", color="green")["col3"],
+                ]
+            ],
+        ]
+    ]
 
 
 def test_flatten():
@@ -20,7 +30,7 @@ def test_flatten():
     assert list(flatten([1, 2, 3, "aaa", [4, 5]])) == [1, 2, 3, "aaa", 4, 5]
 
 
-def test_html(html: BaseHtmlElement):
+def test_html(html_content: BaseHtmlElement):
     output = """<html>
   <body>
     <h1>
@@ -51,7 +61,7 @@ def test_html(html: BaseHtmlElement):
     </div>
   </body>
 </html>"""
-    assert str(html) == output
+    assert str(html_content) == output
 
     repr_str = """html[
   body[
@@ -72,24 +82,28 @@ def test_html(html: BaseHtmlElement):
         'col2']
         div(color='green';class='column')[
         'col3']]]]]"""
-    assert repr(html) == repr_str
+    assert repr(html_content) == repr_str
 
 
 def test_elements():
-    assert all(name == value.name.upper() for name, value in elements.__dict__.items() if isinstance(value, elements.BaseHtmlElement))
+    assert all(
+        name == value.name.upper()
+        for name, value in common.__dict__.items()
+        if isinstance(value, common.BaseHtmlElement)
+    )
 
 
 def test_single():
-    META = BaseHtmlElement('meta', single=True)
-    assert str(META(a='aaa')) == '<meta a="aaa">'
-    assert repr(META(a='aaa')) == "meta(a='aaa')"
+    META = BaseHtmlElement("meta", single=True)
+    assert str(META(a="aaa")) == '<meta a="aaa">'
+    assert repr(META(a="aaa")) == "meta(a='aaa')"
 
 
 def test_hyphen():
-    assert str(HTML(a_b='a-b')) == '<html a-b="a-b">\n\n</html>'
+    assert str(HTML(a_b="a-b")) == '<html a-b="a-b">\n\n</html>'
 
 
 def test_no_content():
-    LINK = BaseHtmlElement('link', no_content=True)
-    assert str(LINK(href='//a.css')) == '<link href="//a.css"/>'
-    assert repr(LINK(herf='//a.css')) == "link(herf='//a.css')"
+    LINK = BaseHtmlElement("link", no_content=True)
+    assert str(LINK(href="//a.css")) == '<link href="//a.css"/>'
+    assert repr(LINK(href="//a.css")) == "link(href='//a.css')"
