@@ -1,8 +1,8 @@
 import pytest
 
 from html_dsl import common
-from html_dsl.elements import BaseHtmlElement, flatten
 from html_dsl.common import BODY, DIV, H1, HTML, SPAN, P
+from html_dsl.elements import BaseHtmlElement, flatten
 
 
 @pytest.fixture
