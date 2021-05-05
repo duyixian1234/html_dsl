@@ -2,6 +2,11 @@ html-dsl
 --------
 A HTML-DSL for Python
 
+
+.. image:: https://github.com/duyixian1234/html_dsl/actions/workflows/ci.yml/badge.svg?branch=master
+  :alt: CI
+  :target: https://github.com/duyixian1234/html_dsl/actions/workflows/ci.yml
+
 USE
 ---
 
