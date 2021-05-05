@@ -4,40 +4,44 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- master
+  - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 strategy:
   matrix:
     Python37:
-      python.version: '3.7'
+      python.version: "3.7"
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "$(python.version)"
+    displayName: "Use Python $(python.version)"
 
-- script: |
-    python -m pip install --upgrade pipenv
-    pipenv install --dev --skip-lock
-  displayName: 'Install dependencies'
+  - script: |
+      python -m pip install --upgrade poetry
+      poetry update
+    displayName: "Install dependencies"
 
-- script: |
-    pipenv run tests
-    pipenv run cov
-    pipenv run lint
-  displayName: 'pytest'
+  - script: |
+      poetry run pylint html_dsl
+    displayName: "lint"
+  - script: |
+      poetry run mypy html_dsl
+    displayName: "type"
+  - script: |
+      poetry run pytest
+    displayName: "pytest"
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    testRunTitle: 'Publish test results for Python $(python.version)'
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: "**/test-*.xml"
+      testRunTitle: "Publish test results for Python $(python.version)"
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/coverage.xml"
+      reportDirectory: "$(System.DefaultWorkingDirectory)/**/htmlcov"
