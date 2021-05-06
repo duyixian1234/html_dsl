@@ -11,7 +11,8 @@ USE
 ---
 
 
->>> from html_dsl.elements import BaseHtmlElement, HTML, BODY, H1, P, DIV, SPAN
+>>> from html_dsl.elements import BaseHtmlElement
+>>> from html_dsl.common import HTML, BODY, H1, P, DIV, SPAN
 >>> html = HTML[
         BODY[
             H1["Title"],
