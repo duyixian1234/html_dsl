@@ -5,7 +5,7 @@ license = "MIT"
 name = "html_dsl"
 readme = "README.rst"
 repository = "https://github.com/duyixian1234/html_dsl"
-version = "0.4.1"
+version = "0.5.0"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -36,7 +36,7 @@ function-naming-style = "any"
 variable-naming-style = "any"
 
 [tool.pylint.message_control]
-disable = ["missing-docstring", "logging-fstring-interpolation", "similarities"]
+disable = ["missing-docstring", "logging-fstring-interpolation", "similarities", "consider-using-f-string"]
 
 [tool.pylint.design]
 min-public-methods = 0

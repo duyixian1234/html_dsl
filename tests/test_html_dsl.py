@@ -1,7 +1,7 @@
 import pytest
 
 from html_dsl import common
-from html_dsl.common import BODY, DIV, H1, HTML, SPAN, P
+from html_dsl.common import BODY, DIV, H1, HTML, SPAN, P, SCRIPT
 from html_dsl.elements import BaseHtmlElement, flatten
 
 
@@ -31,36 +31,15 @@ def test_flatten():
 
 
 def test_html(html_content: BaseHtmlElement):
-    output = """<html>
-  <body>
-    <h1>
-    Title
-    </h1>
-    <p color="yellow">
-    Hello, World.
-      <span>
-      something in span
-      </span>
-    Out of the span
-    </p>
-    <p>
-    This is the second paragraph.
-    </p>
-    <div>
-      <div class="row">
-        <div color="red" class="column">
-        col1
-        </div>
-        <div color="blue" class="column">
-        col2
-        </div>
-        <div color="green" class="column">
-        col3
-        </div>
-      </div>
-    </div>
-  </body>
-</html>"""
+    output = (
+        '<html><body><h1>Title</h1><p color="yellow">Hello, World.'
+        "<span>something in span</span>Out of the span</p><p>"
+        'This is the second paragraph.</p><div><div class="row">'
+        '<div color="red" class="column">col1</div>'
+        '<div color="blue" class="column">col2</div>'
+        '<div color="green" class="column">col3</div>'
+        "</div></div></body></html>"
+    )
     assert str(html_content) == output
 
     repr_str = """html[
@@ -100,10 +79,28 @@ def test_single():
 
 
 def test_hyphen():
-    assert str(HTML(a_b="a-b")) == '<html a-b="a-b">\n\n</html>'
+    assert str(HTML(a_b="a-b")) == '<html a-b="a-b"></html>'
 
 
 def test_no_content():
     LINK = BaseHtmlElement("link", no_content=True)
     assert str(LINK(href="//a.css")) == '<link href="//a.css"/>'
     assert repr(LINK(href="//a.css")) == "link(href='//a.css')"
+
+
+def test_multiline():
+    script = SCRIPT[
+        """
+function f(){
+    console.log("Something")
+}    
+"""
+    ]
+    assert (
+        str(script)
+        == """<script>
+function f(){
+    console.log("Something")
+}    
+</script>"""
+    )

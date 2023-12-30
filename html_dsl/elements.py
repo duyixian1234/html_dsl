@@ -39,7 +39,9 @@ class BaseHtmlElement:
 
     def __repr__(self):
         blank = "  " * self.level()
-        attrs = "({})".format(";".join(f"{key}={repr(self.attrs[key])}" for key in self.attrs)) if self.attrs else ""
+        attrs = (
+            "({})".format(";".join(f"{key}={repr(value)}" for key, value in self.attrs.items())) if self.attrs else ""
+        )
         children = "\n".join(
             repr(child) if isinstance(child, BaseHtmlElement) else blank + repr(child) for child in self.children
         )
@@ -48,19 +50,14 @@ class BaseHtmlElement:
         return "{blank}{name}{attrs}[\n{children}]".format(blank=blank, name=self.name, attrs=attrs, children=children)
 
     def __str__(self):
-        blank = "  " * self.level()
         attrs = (
-            " {}".format(" ".join(f'{key.replace("_", "-")}="{str(self.attrs[key])}"' for key in self.attrs))
+            " {}".format(" ".join(f'{key.replace("_", "-")}="{str(value)}"' for key, value in self.attrs.items()))
             if self.attrs
             else ""
         )
-        children = "\n".join(
-            str(child) if isinstance(child, BaseHtmlElement) else blank + str(child) for child in self.children
-        )
+        children = "".join(str(child) if isinstance(child, BaseHtmlElement) else str(child) for child in self.children)
         if self.single:
-            return "{blank}<{name}{attrs}>".format(blank=blank, name=self.name, attrs=attrs)
+            return "<{name}{attrs}>".format(name=self.name, attrs=attrs)
         if self.no_content:
-            return "{blank}<{name}{attrs}/>".format(blank=blank, name=self.name, attrs=attrs)
-        return "{blank}<{name}{attrs}>\n{children}\n{blank}</{name}>".format(
-            blank=blank, name=self.name, attrs=attrs, children=children
-        )
+            return "<{name}{attrs}/>".format(name=self.name, attrs=attrs)
+        return "<{name}{attrs}>{children}</{name}>".format(name=self.name, attrs=attrs, children=children)
